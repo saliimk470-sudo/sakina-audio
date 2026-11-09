@@ -520,6 +520,11 @@ if(!RM){lenis=new Lenis({duration:1.15,smoothWheel:true});lenis.on('scroll',Scro
 function goTo(sel){var el=$(sel);if(!el)return;if(lenis)lenis.scrollTo(el,{offset:-30,duration:1.6});else el.scrollIntoView({behavior:'smooth'})}
 $$('a[href^="#"]:not([data-assess])').forEach(function(a){a.addEventListener('click',function(e){var h=a.getAttribute('href');if(h.length>1){e.preventDefault();goTo(h)}else e.preventDefault()})});
 
+/* parent-page hash (e.g. /#paths from other pages) */
+function hashGo(){try{var h=window.parent.location.hash;if(h&&h.length>1&&$(h))goTo(h)}catch(e){}}
+setTimeout(hashGo,1000);
+try{window.parent.addEventListener('hashchange',hashGo)}catch(e){}
+
 /* progress + nav */
 var pbar=$('#prog i');
 ScrollTrigger.create({start:0,end:'max',onUpdate:function(s){pbar.style.transform='scaleX('+s.progress+')'}});
