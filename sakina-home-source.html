@@ -56,6 +56,14 @@ nav{position:fixed;top:14px;inset-inline:0;z-index:80;display:flex;justify-conte
 /* hero */
 .hero{min-height:100svh;display:flex;align-items:center;padding:130px 0 90px;overflow:hidden;background:linear-gradient(180deg,#e9f1ed 0%,#f3f6f2 55%,var(--bg) 100%)}
 .nlogin{font-weight:600;font-size:14px;color:var(--g2);padding:8px 12px;white-space:nowrap}.nlogin:hover{color:var(--g)}.mlink{display:inline-block;margin-top:18px;color:var(--g);font-weight:600;font-size:15px}.mlink:hover{text-decoration:underline}
+#mb{display:flex;align-items:center;gap:4px;margin-inline-start:auto;margin-inline-end:10px;position:relative}
+.mb-d{display:flex;align-items:center;gap:4px}.mb-m{display:none;position:relative}
+.mb-t{display:flex;align-items:center;gap:6px;border:0;background:transparent;padding:8px 10px;color:var(--g2);font:600 14px inherit;font-family:inherit;cursor:pointer}
+.mb-t svg{width:18px;height:18px}.mb-bur{border:1px solid var(--line);background:#fff;color:var(--g2);border-radius:10px;min-width:40px;min-height:40px;font-size:20px;cursor:pointer;font-family:inherit}
+.mb-p{position:absolute;inset-inline-end:0;top:calc(100% + 10px);min-width:190px;padding:8px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 30px -10px rgba(18,49,58,.25);z-index:300}
+.mb-p[hidden]{display:none}.mb-p a,.mb-p button{display:block;width:100%;text-align:right;padding:11px 12px;border:0;border-radius:8px;background:transparent;color:var(--ink);font:500 14px inherit;font-family:inherit;cursor:pointer}
+.mb-p a:hover,.mb-p button:hover{background:#EEF3F0}
+@media(max-width:700px){.mb-d{display:none}.mb-m{display:block}}
 .hero{position:relative}
 .hbg{position:absolute;inset:0;background:url(https://raw.githubusercontent.com/saliimk470-sudo/sakina-audio/2ba9a8fbdeaebc8cf1ee15ec6f7f310a77d85b0f/sakina-calm-bg.jpg) center/cover no-repeat;opacity:.4;-webkit-mask-image:linear-gradient(180deg,#000 55%,transparent 100%);mask-image:linear-gradient(180deg,#000 55%,transparent 100%);z-index:0;pointer-events:none}
 #lake{z-index:1;position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -298,8 +306,8 @@ section.bre{background:linear-gradient(160deg,#12313A,#0f4a3b);color:#fff;border
     <li><a href="#paths">المسارات</a></li>
         <li><a href="#who">عن سكينة</a></li>
   </ul>
-  <a class="nlogin" href="https://app.sakinaclub.com/login" target="_top">تسجيل الدخول</a>
-  <a class="btn pri" href="#" data-assess data-mag>ابدأ التقييم</a>
+  <div id="mb"><a class="nlogin" href="https://app.sakinaclub.com/login" target="_top">تسجيل الدخول</a></div>
+  <a class="btn pri" id="navcta" href="#" data-assess data-mag>ابدأ التقييم</a>
 </div></nav>
 
 <main id="top">
@@ -753,6 +761,53 @@ $('#openSes').addEventListener('click',function(){goTo('#breathe')});
 
 ScrollTrigger.refresh();
 document.fonts&&document.fonts.ready.then(function(){ScrollTrigger.refresh();moveSeg()});
+})();
+</script>
+<script>
+(function(){
+var APP='https://app.sakinaclub.com',mb=document.getElementById('mb'),cta=document.getElementById('navcta');
+if(!mb||!cta)return;
+var uid='',target='/program-access',client=null,rev=0,ctaHTML=cta.innerHTML,busy=false;
+var guest=mb.innerHTML;
+function lsUser(){try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k)){var v=JSON.parse(localStorage.getItem(k)||'null');var u=v&&(v.user||(v.currentSession&&v.currentSession.user));if(u&&u.id)return u.id}}}catch(e){}return ''}
+function getClient(){try{return window.parent&&window.parent.__sakinaBrowserClient||null}catch(e){return null}}
+function closeAll(){var p=mb.querySelectorAll('.mb-p');for(var i=0;i<p.length;i++)p[i].hidden=true;var b=mb.querySelectorAll('[aria-expanded]');for(var j=0;j<b.length;j++)b[j].setAttribute('aria-expanded','false')}
+function render(){
+ closeAll();
+ if(!uid){mb.innerHTML=guest;cta.setAttribute('data-assess','');cta.href='https://app.sakinaclub.com/panic-quiz';cta.innerHTML=ctaHTML;cta.removeAttribute('data-member');return}
+ mb.innerHTML='<div class="mb-d"><a class="nlogin" href="'+APP+'/my-library" target="_top">مكتبتي</a><button class="mb-t" type="button" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/></svg><span>حسابي</span><span aria-hidden="true">⌄</span></button><div class="mb-p" hidden><a href="'+APP+'/account" target="_top">بيانات الحساب</a><button type="button" data-lo>تسجيل الخروج</button></div></div>'
+ +'<div class="mb-m"><button class="mb-bur" type="button" aria-label="القائمة" aria-expanded="false">☰</button><div class="mb-p" hidden><a href="'+APP+'/my-library" target="_top">مكتبتي</a><a href="'+APP+'/account" target="_top">حسابي</a><button type="button" data-lo>تسجيل الخروج</button></div></div>';
+ cta.removeAttribute('data-assess');cta.setAttribute('data-member','1');cta.href=APP+target;cta.target='_top';cta.textContent='تابع البرنامج';
+ var t=mb.querySelectorAll('.mb-t,.mb-bur');
+ for(var i=0;i<t.length;i++)t[i].addEventListener('click',function(e){e.stopPropagation();var p=this.nextElementSibling,o=p.hidden;closeAll();p.hidden=!o;this.setAttribute('aria-expanded',String(o))});
+ var lo=mb.querySelectorAll('[data-lo]');
+ for(var k=0;k<lo.length;k++)lo[k].addEventListener('click',logout);
+}
+function logout(){
+ if(busy)return;busy=true;var b=this;b.disabled=true;
+ var done=function(){try{window.top.location.assign(APP+'/login')}catch(e){location.href=APP+'/login'}};
+ var c=client||getClient();
+ if(c){c.auth.signOut().then(function(r){if(r&&r.error){b.disabled=false;busy=false;b.textContent='تعذّر تسجيل الخروج، حاول مرة أخرى'}else done()}).catch(function(){b.disabled=false;busy=false})}
+ else{try{var ks=[];for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(/^sb-.*-auth-token$/.test(k))ks.push(k)}ks.forEach(function(k){localStorage.removeItem(k)})}catch(e){}done()}
+}
+async function update(session){
+ var my=++rev,id=session&&session.user&&session.user.id||'';
+ if(id!==uid){uid=id;target='/program-access';render()}
+ if(id&&client){
+  try{var r=await client.from('entitlements').select('product_code').eq('user_id',id).eq('active',true);
+   if(my!==rev)return;
+   if(!r.error){var c={};(r.data||[]).forEach(function(x){c[x.product_code]=1});var n=Object.keys(c).length;
+    var nt=c.panic_8_full?'/panic-attak-program':(n===1&&c.panic_7_body)?'/7-day-program-body':(n===1&&c.panic_7_thoughts)?'/7-day-program-thoughts':'/program-access';
+    if(nt!==target){target=nt;cta.href=APP+target}}}catch(e){}
+ }
+}
+document.addEventListener('click',function(e){if(!e.target.closest||!e.target.closest('#mb'))closeAll()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeAll()});
+uid=lsUser();if(uid)render();
+window.__skMember=function(session){client=client||getClient();update(session)};
+var tries=0;(function wait(){client=getClient();
+ if(client){client.auth.getSession().then(function(r){update(r.data.session)}).catch(function(){});client.auth.onAuthStateChange(function(ev,session){setTimeout(function(){update(session)},0)})}
+ else if(++tries<25)setTimeout(wait,300)})();
 })();
 </script>
 </body>
