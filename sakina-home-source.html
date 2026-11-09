@@ -55,6 +55,7 @@ nav{position:fixed;top:14px;inset-inline:0;z-index:80;display:flex;justify-conte
 
 /* hero */
 .hero{min-height:100svh;display:flex;align-items:center;padding:130px 0 90px;overflow:hidden;background:linear-gradient(180deg,#e9f1ed 0%,#f3f6f2 55%,var(--bg) 100%)}
+.nlogin{font-weight:600;font-size:14px;color:var(--g2);padding:8px 12px;white-space:nowrap}.nlogin:hover{color:var(--g)}.mlink{display:inline-block;margin-top:18px;color:var(--g);font-weight:600;font-size:15px}.mlink:hover{text-decoration:underline}
 .hero{position:relative}
 .hbg{position:absolute;inset:0;background:url(https://raw.githubusercontent.com/saliimk470-sudo/sakina-audio/2ba9a8fbdeaebc8cf1ee15ec6f7f310a77d85b0f/sakina-calm-bg.jpg) center/cover no-repeat;opacity:.4;-webkit-mask-image:linear-gradient(180deg,#000 55%,transparent 100%);mask-image:linear-gradient(180deg,#000 55%,transparent 100%);z-index:0;pointer-events:none}
 #lake{z-index:1;position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -297,6 +298,7 @@ section.bre{background:linear-gradient(160deg,#12313A,#0f4a3b);color:#fff;border
     <li><a href="#paths">المسارات</a></li>
         <li><a href="#who">عن سكينة</a></li>
   </ul>
+  <a class="nlogin" href="https://app.sakinaclub.com/login" target="_top">تسجيل الدخول</a>
   <a class="btn pri" href="#" data-assess data-mag>ابدأ التقييم</a>
 </div></nav>
 
@@ -389,6 +391,7 @@ section.bre{background:linear-gradient(160deg,#12313A,#0f4a3b);color:#fff;border
         <div class="si" data-i="2" tabindex="0"><h3><b>3</b>تدرّب</h3><p>تكرار الخطوة حتى يتعلّم الدماغ أن الموقف يمكن عبوره دون هروب.</p></div>
         <div class="si" data-i="3" tabindex="0"><h3><b>4</b>استمر</h3><p>تتابع تقدّمك وتثبّت ما تعلّمته، فيصير جزءًا من حياتك لا تمرينًا مؤقتًا.</p></div>
       </div>
+      <a class="mlink" href="https://app.sakinaclub.com/method" target="_top">تعرّف أكثر على منهج سكينة ←</a>
     </div>
   </div>
 </section>
@@ -429,7 +432,7 @@ section.bre{background:linear-gradient(160deg,#12313A,#0f4a3b);color:#fff;border
       <div class="stats rv">
         <div class="stat"><b><span data-count="10">10</span>+</b><span>سنوات خبرة سريرية</span></div>
       </div>
-      
+      <a class="btn ghost rv" href="https://app.sakinaclub.com/about" target="_top" style="margin-top:22px">تعرّف عليّ أكثر <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></a>
     </div>
     </div>
   </div>
@@ -480,9 +483,9 @@ section.bre{background:linear-gradient(160deg,#12313A,#0f4a3b);color:#fff;border
   <div class="wrap">
     <div class="fg">
       <div><span class="logo">سكينة</span><p>مسارات عربية لفهم القلق والتعامل معه.</p></div>
-      <div><h4>سكينة</h4><ul><li><a href="#paths">المسارات</a></li><li><a href="#who">عن سكينة</a></li><li><a href="#">الدعم</a></li></ul></div>
-      <div><h4>حسابك</h4><ul><li><a href="#">تسجيل الدخول</a></li><li><a href="#">مساراتي</a></li></ul></div>
-      <div><h4>قانوني</h4><ul><li><a href="#">سياسة الخصوصية</a></li><li><a href="#">الشروط والأحكام</a></li></ul></div>
+      <div><h4>سكينة</h4><ul><li><a href="#paths">المسارات</a></li><li><a href="https://app.sakinaclub.com/about" target="_top">من يقف خلف سكينة؟</a></li><li><a href="https://app.sakinaclub.com/support" target="_top">الدعم والتواصل</a></li></ul></div>
+      <div><h4>حسابك</h4><ul><li><a href="https://app.sakinaclub.com/login" target="_top">تسجيل الدخول</a></li><li><a href="https://app.sakinaclub.com/program-access" target="_top">مساراتي</a></li></ul></div>
+      <div><h4>قانوني</h4><ul><li><a href="https://app.sakinaclub.com/privacy" target="_top">سياسة الخصوصية</a></li><li><a href="https://app.sakinaclub.com/terms" target="_top">شروط الاستخدام</a></li></ul></div>
     </div>
     <p class="disc">المحتوى تعليمي ولا يغني عن التشخيص أو العلاج. إن كنت في حالة طارئة أو تفكر بإيذاء نفسك، تواصل مع خدمات الطوارئ في بلدك فورًا. © 2026 سكينة</p>
   </div>
@@ -502,7 +505,7 @@ var ASSESS='https://app.sakinaclub.com/panic-quiz'; /* رابط صفحة الأ�
 var RM=matchMedia('(prefers-reduced-motion: reduce)').matches,TOUCH=matchMedia('(hover:none)').matches;
 gsap.registerPlugin(ScrollTrigger);
 
-$$('[data-assess]').forEach(function(a){a.href=ASSESS});
+$$('[data-assess]').forEach(function(a){a.href=ASSESS;a.target='_top'});
 /* smooth scroll */
 var lenis=null;
 if(!RM){lenis=new Lenis({duration:1.15,smoothWheel:true});lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(function(t){lenis.raf(t*1000)});gsap.ticker.lagSmoothing(0)}
@@ -669,7 +672,7 @@ function result(){
   var v=ans[0],body=(v==='A'||v==='D'),r=$('#qres');
   r.innerHTML='<p class="qn" style="text-align:center">إجابتك الأولية</p><h3>'+(body?'تبدأ نوبتك غالبًا من الجسد':'تبدأ نوبتك غالبًا من الفكرة')+'</h3>'
    +'<p>'+(body?'يبدو أن إحساسًا جسديًا مفاجئًا هو ما يشعل الدائرة عندك. أكمل بقية الأسئلة لتحصل على نقطة البداية المقترحة وشرح نمطك.':'يبدو أن فكرة مخيفة من نوع «ماذا لو…؟» هي ما يشعل الدائرة عندك. أكمل بقية الأسئلة لتحصل على نقطة البداية المقترحة وشرح نمطك.')+'</p>'
-   +'<a class="btn pri" href="'+ASSESS+'" data-assess>أكمل التقييم <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></a>'
+   +'<a class="btn pri" href="'+ASSESS+'" target="_top" data-assess>أكمل التقييم <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></a>'
    +'<button class="again" id="again">أعد الإجابة</button>';
   $('#again').addEventListener('click',function(){ans=[];$$('.opt').forEach(function(x){x.classList.remove('sel')});showQ(0)});
 }
