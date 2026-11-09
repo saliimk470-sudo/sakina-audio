@@ -521,8 +521,8 @@ function goTo(sel){var el=$(sel);if(!el)return;if(lenis)lenis.scrollTo(el,{offse
 $$('a[href^="#"]:not([data-assess])').forEach(function(a){a.addEventListener('click',function(e){var h=a.getAttribute('href');if(h.length>1){e.preventDefault();goTo(h)}else e.preventDefault()})});
 
 /* parent-page hash (e.g. /#paths from other pages) */
-function hashGo(){try{var h=window.parent.location.hash;if(h&&h.length>1&&$(h))goTo(h)}catch(e){}}
-setTimeout(hashGo,1000);
+function hashGo(imm){try{var h=window.parent.location.hash,el=h&&h.length>1&&$(h);if(!el)return;if(imm===true){if(lenis)lenis.scrollTo(el,{offset:-30,immediate:true});else el.scrollIntoView()}else goTo(h)}catch(e){}}
+setTimeout(function(){hashGo(true)},800);
 try{window.parent.addEventListener('hashchange',hashGo)}catch(e){}
 
 /* progress + nav */
