@@ -1,0 +1,114 @@
+<script type="module">
+function installMemberHeader(client) {
+    if (typeof window === "undefined") return
+    const scope = window
+    scope.__sakinaBrowserClient = client
+    if (scope.__sakinaNavigationV2) return
+    scope.__sakinaNavigationV2 = true
+    const style = document.createElement("style")
+    style.textContent = `.sk-nav-source{display:none!important}.sk-nav{width:100%;min-width:0;position:relative;z-index:100;container-type:inline-size;font-family:"Noto Kufi Arabic",Arial,sans-serif;background:transparent;border-bottom:0;color:#12313A;direction:rtl;padding:14px clamp(10px,4vw,24px) 0}.sk-nav *{box-sizing:border-box}.sk-nav-row{display:flex;align-items:center;gap:20px;width:min(1100px,100%);margin:0 auto;min-height:64px;padding:8px 14px 8px 22px;border-radius:99px;background:rgba(250,249,246,.78);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid #E3E7E2;box-shadow:0 12px 30px -20px rgba(18,49,58,.35)}.sk-logo{display:flex;align-items:center;margin-inline-end:auto;text-decoration:none;color:#12313A;font-weight:700;flex-shrink:0}.sk-logo img{display:block;width:110px;height:40px;object-fit:contain}.sk-desktop{display:flex;align-items:center;gap:16px}.sk-nav a,.sk-nav button{font-family:inherit;font-size:14px}.sk-link{padding:10px;color:#12313A;font-weight:500;text-decoration:none}.sk-link:hover{color:#176953}.sk-cta{padding:11px 22px;background:linear-gradient(135deg,#1c7a61,#12513f);color:#fff;text-decoration:none;border-radius:99px;font-weight:700;white-space:nowrap;box-shadow:0 10px 30px -10px rgba(23,105,83,.65);transition:box-shadow .25s}.sk-cta:hover{box-shadow:0 16px 38px -10px rgba(23,105,83,.85)}.sk-account{position:relative}.sk-toggle{display:flex;align-items:center;gap:7px;border:0;background:transparent;padding:10px;color:#12313A;cursor:pointer}.sk-toggle svg{width:19px;height:19px}.sk-panel{position:absolute;inset-inline-end:0;top:calc(100% + 10px);min-width:190px;padding:8px;background:#fff;border:1px solid #E3E7E2;border-radius:16px;box-shadow:0 16px 36px -14px rgba(18,49,58,.3);z-index:101}.sk-panel a,.sk-panel button{display:block;width:100%;text-align:right;padding:12px;border:0;border-radius:8px;background:transparent;color:#26332D;text-decoration:none;cursor:pointer}.sk-panel a:hover,.sk-panel button:hover{background:#EEF3F0}.sk-panel[hidden]{display:none}.sk-mobile{display:none;align-items:center;gap:8px}.sk-burger{border:1px solid #E3E7E2;background:#fff;color:#176953;border-radius:99px;min-width:44px;min-height:44px;font-size:22px!important;cursor:pointer}.sk-nav :focus-visible{outline:3px solid #496B6180;outline-offset:3px}.sk-nav-error{margin:0;padding:8px 20px;color:#9a493e;font-size:13px}.sk-mobile-panel{inset-inline:14px;top:68px}.sk-guest{color:#176953;text-decoration:none;padding:10px;font-weight:600}@container(max-width:767px){.sk-nav{padding-top:10px}.sk-nav-row{min-height:60px;padding:8px 12px 8px 16px;gap:8px}.sk-desktop{display:none}.sk-mobile{display:flex}.sk-logo img{width:86px;height:36px}.sk-cta{padding:10px 13px;font-size:13px!important}}`
+    document.head.appendChild(style)
+    let userId = ""
+    let target = "/program-access"
+    let revision = 0
+    let scheduled = false
+    let logoutBusy = false
+    const instances = new Map()
+    const closeMenus = () => instances.forEach(({root}) => {
+        root.querySelectorAll(".sk-panel").forEach(p => p.hidden = true)
+        root.querySelectorAll("[aria-expanded]").forEach(b => b.setAttribute("aria-expanded", "false"))
+    })
+    const render = (original, root) => {
+        const logoSrc = original.querySelector("img")?.src
+        root.replaceChildren()
+        const row = document.createElement("div")
+        row.className = "sk-nav-row"
+        const logo = document.createElement("a")
+        logo.className = "sk-logo"
+        logo.href = "/"
+        logo.setAttribute("aria-label", "سكينة — الرئيسية")
+        if (logoSrc) { const img = document.createElement("img"); img.src = logoSrc; img.alt = "سكينة"; logo.appendChild(img) }
+        else logo.textContent = "سكينة"
+        row.appendChild(logo)
+        if (!userId) {
+            const login = document.createElement("a")
+            login.className = "sk-guest"; login.href = "/login"; login.textContent = "تسجيل الدخول"
+            row.appendChild(login)
+        } else {
+            row.insertAdjacentHTML("beforeend", `<div class="sk-desktop"><a class="sk-link" href="/my-library">مكتبتي</a><a class="sk-cta" href="${target}">تابع البرنامج</a><div class="sk-account"><button class="sk-toggle" type="button" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/></svg><span>حسابي</span><span aria-hidden="true">⌄</span></button><div class="sk-panel" hidden><a href="/account">بيانات الحساب</a><button type="button" data-sk-logout>تسجيل الخروج</button></div></div></div><div class="sk-mobile"><a class="sk-cta" href="${target}">تابع</a><button class="sk-burger" type="button" aria-label="القائمة" aria-expanded="false">☰</button><div class="sk-panel sk-mobile-panel" hidden><a href="/my-library">مكتبتي</a><a href="/account">حسابي</a><button type="button" data-sk-logout>تسجيل الخروج</button></div></div>`)
+        }
+        root.appendChild(row)
+        root.querySelectorAll(".sk-toggle,.sk-burger").forEach(button => button.addEventListener("click", () => {
+            const panel = button.nextElementSibling
+            const opening = panel.hidden
+            closeMenus(); panel.hidden = !opening; button.setAttribute("aria-expanded", String(opening))
+        }))
+        root.querySelectorAll("[data-sk-logout]").forEach(button => button.addEventListener("click", async () => {
+            if (logoutBusy) return
+            logoutBusy = true; button.disabled = true
+            try {
+                const {error} = await client.auth.signOut()
+                if (error) throw error
+                window.location.assign("/login")
+            } catch {
+                button.disabled = false
+                let error = root.querySelector(".sk-nav-error")
+                if (!error) { error = document.createElement("p"); error.className = "sk-nav-error"; error.setAttribute("role", "alert"); root.appendChild(error) }
+                error.textContent = "تعذّر تسجيل الخروج. حاول مرة أخرى."
+            } finally { logoutBusy = false }
+        }))
+    }
+    const scan = () => {
+        scheduled = false
+        instances.forEach(({root}, source) => { if (!source.isConnected) { root.remove(); instances.delete(source) } })
+        document.querySelectorAll('nav[data-framer-name="Sakina Navigation"]').forEach(original => {
+            let entry = instances.get(original)
+            if (!entry || !entry.root.isConnected) {
+                const root = document.createElement("nav")
+                root.className = "sk-nav"; root.setAttribute("aria-label", "التنقل الرئيسي")
+                original.classList.add("sk-nav-source")
+                original.before(root)
+                entry = {root, key: ""}; instances.set(original, entry)
+            }
+            const key = userId + "|" + target
+            if (entry.key !== key) { entry.key = key; render(original, entry.root) }
+        })
+    }
+    const schedule = () => { if (!scheduled) { scheduled = true; requestAnimationFrame(scan) } }
+    const update = async (session) => {
+        const currentRevision = ++revision
+        const nextId = session?.user?.id || ""
+        if (nextId !== userId) { userId = nextId; target = "/program-access"; closeMenus(); schedule() }
+        if (nextId) {
+            const {data: rows, error} = await client.from("entitlements").select("product_code").eq("user_id", nextId).eq("active", true)
+            if (currentRevision !== revision) return
+            if (!error) {
+                const codes = new Set((rows || []).map((r) => r.product_code))
+                target = codes.has("panic_8_full") ? "/panic-attak-program" : codes.size === 1 && codes.has("panic_7_body") ? "/7-day-program-body" : codes.size === 1 && codes.has("panic_7_thoughts") ? "/7-day-program-thoughts" : "/program-access"
+            }
+        }
+        schedule()
+    }
+    client.auth.getSession().then(({data}) => update(data.session)).catch(() => schedule())
+    client.auth.onAuthStateChange((event, session) => {
+        if (event === "TOKEN_REFRESHED" && (session?.user?.id || "") === userId) return
+        setTimeout(() => { void update(session) }, 0)
+    })
+    new MutationObserver(schedule).observe(document.documentElement, {childList:true, subtree:true})
+    document.addEventListener("click", event => { if (!event.target?.closest(".sk-toggle,.sk-burger,.sk-panel")) closeMenus() })
+    document.addEventListener("keydown", event => { if (event.key === "Escape") { const expanded = document.querySelector('.sk-nav [aria-expanded="true"]'); closeMenus(); expanded?.focus() } })
+    schedule()
+}
+
+
+(async () => {
+ if (window.__sakinaNavigationV2) return;
+ let client = window.__sakinaBrowserClient;
+ if (!client) {
+ const {createClient} = await import("https://esm.sh/@supabase/supabase-js@2.57.4");
+ if (window.__sakinaNavigationV2) return;
+ client = window.__sakinaBrowserClient || createClient("https://rqepembcddvnoptpvmyw.supabase.co", "sb_publishable_c9QpoQvTHLoGlDJrmAE93A_dNYZsGXY", {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
+ }
+ installMemberHeader(client);
+})().catch(() => console.error("Sakina navigation could not load"));
+</script>
