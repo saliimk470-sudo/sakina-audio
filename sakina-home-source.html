@@ -263,7 +263,7 @@ footer a:hover{color:#fff}
 footer .logo{display:flex;align-items:center;gap:10px}footer .logo .lw{font-family:"Noto Kufi Arabic",sans-serif;font-size:30px;font-weight:600;color:#fff}
 @media(max-width:560px){.nav .logo .lw{display:none}}
 .orb svg#orb{position:absolute;inset:0;width:100%;height:100%;transform:scale(.55);transform-origin:50% 50%}
-.orb b{text-shadow:0 0 10px #12313A,0 0 4px #12313A}
+.sesW{display:block;margin:-6px 0 22px;font-family:"Noto Kufi Arabic";font-size:clamp(26px,5vw,36px);min-height:1.4em}
 /* breathing session */
 .orb{position:relative;width:min(56vw,300px);height:min(56vw,300px);display:grid;place-items:center;margin:34px 0}
 .orb i{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#bfe3d3,#3d9a7c 55%,#176953);box-shadow:0 0 90px 10px rgba(134,169,157,.35);transform:scale(.55)}
@@ -477,7 +477,8 @@ section.bre{background:linear-gradient(160deg,#12313A,#0f4a3b);color:#fff;border
     <p class="lead rv" style="margin-inline:auto">اضغط ابدأ ودع الشكل يقودك: شهيق أربع ثوانٍ، وزفير ست.</p>
     <div class="bcard rv">
       <p id="sesT">اجلس بارتياح، وأرخِ كتفيك.</p>
-      <div class="orb"><i class="r"></i><svg id="orb" viewBox="0 0 200 200" aria-hidden="true"><use href="#skG"/></svg><b id="sesW">جاهز؟</b></div>
+      <div class="orb"><i class="r"></i><svg id="orb" viewBox="0 0 200 200" aria-hidden="true"><use href="#skG"/></svg></div>
+      <b id="sesW" class="sesW">جاهز؟</b>
       <button id="sesGo">ابدأ</button>
       <p id="sesC">ست دورات</p>
       <button id="sesX" style="display:none">إيقاف</button>
