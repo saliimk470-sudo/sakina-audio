@@ -46,6 +46,7 @@ nav{position:fixed;top:14px;inset-inline:0;z-index:80;display:flex;justify-conte
 .nav{pointer-events:auto;width:min(1100px,92vw);display:flex;align-items:center;justify-content:space-between;padding:10px 14px 10px 22px;border-radius:99px;background:rgba(250,249,246,.72);backdrop-filter:blur(14px);border:1px solid var(--line);transition:box-shadow .3s}
 .nav.sc{box-shadow:0 12px 40px -18px rgba(18,49,58,.4)}
 .logo{font-family:'Aref Ruqaa',serif;font-size:34px;color:var(--g2);line-height:1;padding-inline:6px}
+.nav .logo{display:flex;align-items:center;padding-inline:0}.nav .logo img{display:block;width:110px;height:40px;object-fit:contain}
 .nav ul{display:flex;gap:26px;list-style:none;font-size:15px;font-weight:500}
 .nav ul a{position:relative;padding:4px 0;color:var(--ink)}
 .nav ul a::after{content:"";position:absolute;inset-inline:0;bottom:-2px;height:2px;background:var(--g);transform:scaleX(0);transition:transform .3s;transform-origin:right}
@@ -298,7 +299,7 @@ section.bre{background:linear-gradient(160deg,#12313A,#0f4a3b);color:#fff;border
 <div id="cur"></div>
 
 <nav><div class="nav" id="nav">
-  <a class="logo" href="#top" aria-label="سكينة">سكينة</a>
+  <a class="logo" href="#top" aria-label="سكينة"><img src="https://framerusercontent.com/images/UJs5FBwFp35JRQkF25kt6yC9A.svg?width=180&amp;height=60" alt="سكينة" width="110" height="40"></a>
   <ul>
     <li><a href="#why1">لماذا الفهم لا يكفي</a></li>
     <li><a href="#start">من أين تبدأ</a></li>
